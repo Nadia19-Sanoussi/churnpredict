@@ -543,6 +543,7 @@ def generer_recommandations_ai_text(client: dict) -> str:
     d'erreur ou de trace.
     """
     prompt = _construire_prompt(client)
+    st.write(prompt)
 
     if openrouter_disponible():
         try:
