@@ -448,8 +448,12 @@ MESSAGE_IA_INDISPONIBLE = (
 )
 
 
+#def openrouter_disponible() -> bool:
+#    return bool(os.environ.get("OPENROUTER_API_KEY"))
+
+
 def openrouter_disponible() -> bool:
-    return bool(os.environ.get("OPENROUTER_API_KEY"))
+    return "OPENROUTER_API_KEY" in st.secrets
 
 
 def moteur_ia_disponible() -> bool:
@@ -468,7 +472,8 @@ def _construire_prompt(client: dict) -> str:
 
 
 def _generer_via_openrouter(prompt: str) -> str:
-    api_key = os.environ.get("OPENROUTER_API_KEY")
+    #api_key = os.environ.get("OPENROUTER_API_KEY")
+    api_key = st.secrets["OPENROUTER_API_KEY"]
     response = requests.post(
         OPENROUTER_URL,
         headers={
@@ -794,7 +799,7 @@ def export_pdf_rapport(nom_analyse: str, source: str, df_res: pd.DataFrame) -> b
 #  SIDEBAR — navigation simple, 5 écrans
 # ────────────────────────────────────────────────────────────
 with st.sidebar:
-    st.markdown('<div class="cp-brand">📊 ChurnPredict</div>', unsafe_allow_html=True)
+    st.markdown('<div class="cp-brand">ChurnPredict</div>', unsafe_allow_html=True)
     st.markdown('<div class="cp-tagline">Prédiction du churn & recommandations</div>', unsafe_allow_html=True)
     st.markdown("---")
 
