@@ -461,55 +461,100 @@ def moteur_ia_disponible() -> bool:
     return openrouter_disponible()
 
 def _construire_prompt(client: dict) -> str:
-    profil_lines = [f"- {k}: {v}" for k, v in client.items()]
+    profil = "\n".join([f"- {k}: {v}" for k, v in client.items()])
 
-    return (
-        "Tu es un consultant senior en CRM, fidélisation client et intelligence artificielle "
-        "spécialisé dans la réduction du churn des entreprises SaaS et e-commerce.\n\n"
+    return f"""
+Tu es un expert de la rétention client/utilisateur spécialisé dans la fidélisation des clients SaaS et e-commerce.
 
-        "Analyse attentivement les informations du client ci-dessous. "
-        "Ne donne jamais de recommandations génériques. "
-        "Chaque recommandation doit être directement justifiée par les caractéristiques du client "
-        "(ancienneté, fréquence d'utilisation, activité, satisfaction, historique, type d'abonnement, etc.).\n\n"
+Tu dois analyser UNIQUEMENT les informations ci-dessous.
 
-        "Ta réponse doit contenir exactement les sections suivantes :\n\n"
+Interprétation des variables :
+- recence_jours : nombre de jours depuis la dernière activité.
+- frequence_activite : fréquence d'utilisation du service.
+- engagement_temps : temps moyen d'utilisation.
+- anciennete_mois : durée de la relation client.
+- valeur_client : valeur économique du client.
+- satisfaction_client : satisfaction sur 10.
+- score_churn : probabilité de churn.
+- segment : niveau de risque.
 
-        "## Recommandations prioritaires\n"
-        "1. **Action immédiate (24 heures)** : action prioritaire pour éviter le churn.\n"
-        "2. **Court terme (7 jours)** : action de réengagement.\n"
-        "3. **Moyen terme (30 jours)** : action d'amélioration de l'expérience client.\n"
-        "4. **Long terme** : stratégie durable de fidélisation.\n\n"
+Ta mission est de produire des recommandations PERSONNALISÉES.
 
-        "## Analyse IA\n"
-        "- Explique en 2 ou 3 phrases pourquoi ce client présente un risque de churn.\n"
-        "- Identifie les facteurs les plus importants.\n"
-        "- Fais le lien entre les variables observées.\n\n"
+Ne traduis jamais les variables.
+N'explique jamais les termes.
+Ne donne jamais de définition.
 
-        "## Impact attendu\n"
-        "- Explique brièvement comment ces actions peuvent réduire le risque de churn.\n\n"
+Réponds uniquement en français.
 
-        "Contraintes :\n"
-        "- Réponds uniquement en français.\n"
-        "- Style professionnel.\n"
-        "- Maximum 15 lignes.\n"
-        "- Pas de phrases inutiles.\n"
-        "- Pas d'introduction.\n"
-        "- Pas de conclusion.\n"
-        "- Utilise un vocabulaire métier CRM.\n\n"
+Format attendu :
 
-        "Profil client :\n"
-        + "\n".join(profil_lines)
-    )
+### Recommandations prioritaires
+1. Action immédiate
+2. Court terme
+3. Moyen terme
+4. Long terme
+
+### Analyse IA
+Explique en 2 phrases les causes probables du churn.
+
+### Impact attendu
+Explique en 2 phrases comment ces actions peuvent réduire le risque.
+
+Profil client :
+
+{profil}
+"""
+
+#def _construire_prompt(client: dict) -> str:
+ #   profil_lines = [f"- {k}: {v}" for k, v in client.items()]
+
+  #  return (
+   #     "Tu es un consultant senior en CRM, fidélisation client et intelligence artificielle "
+    #    "spécialisé dans la réduction du churn des entreprises SaaS et e-commerce.\n\n"
+
+     #   "Analyse attentivement les informations du client ci-dessous. "
+      #  "Ne donne jamais de recommandations génériques. "
+       # "Chaque recommandation doit être directement justifiée par les caractéristiques du client "
+        #"(ancienneté, fréquence d'utilisation, activité, satisfaction, historique, type d'abonnement, etc.).\n\n"
+
+        #"Ta réponse doit contenir exactement les sections suivantes :\n\n"
+
+        #"## Recommandations prioritaires\n"
+       # "1. **Action immédiate (24 heures)** : action prioritaire pour éviter le churn.\n"
+        #"2. **Court terme (7 jours)** : action de réengagement.\n"
+       # "3. **Moyen terme (30 jours)** : action d'amélioration de l'expérience client.\n"
+        #"4. **Long terme** : stratégie durable de fidélisation.\n\n"
+
+    #    "## Analyse IA\n"
+     #   "- Explique en 2 ou 3 phrases pourquoi ce client présente un risque de churn.\n"
+      #  "- Identifie les facteurs les plus importants.\n"
+       # "- Fais le lien entre les variables observées.\n\n"
+
+    #   "## Impact attendu\n"
+    #    "- Explique brièvement comment ces actions peuvent réduire le risque de churn.\n\n"
+
+     #   "Contraintes :\n"
+      #  "- Réponds uniquement en français.\n"
+       # "- Style professionnel.\n"
+        #"- Maximum 15 lignes.\n"
+        #"- Pas de phrases inutiles.\n"
+       # "- Pas d'introduction.\n"
+       # "- Pas de conclusion.\n"
+        #"- Utilise un vocabulaire métier CRM.\n\n"
+
+       # "Profil client :\n"
+        #+ "\n".join(profil_lines)
+   # )
 
 
 #def _construire_prompt(client: dict) -> str:
-#    profil_lines = [f"- {k} : {v}" for k, v in client.items()]
-#    return ("Vous êtes un expert en rétention client pour des entreprises e-commerce et SaaS.\n"
-#        "Pour le profil suivant, proposez 4 recommandations actionnables, classées par priorité, "
-#        "ainsi qu'une courte note d'investigation (causes possibles). Répondez en français, "
-#        "de façon concise (8 lignes maximum), avec au moins une action immédiate et une action long terme.\n\n"
- #       "Profil client :\n" + "\n".join(profil_lines)
-  #  )
+ #   profil_lines = [f"- {k} : {v}" for k, v in client.items()]
+  #  return ("Vous êtes un expert en rétention client pour des entreprises e-commerce et SaaS.\n"
+   #     "Pour le profil suivant, proposez 4 recommandations actionnables, classées par priorité, "
+    #    "ainsi qu'une courte note d'investigation (causes possibles). Répondez en français, "
+     #   "de façon concise (8 lignes maximum), avec au moins une action immédiate et une action long terme.\n\n"
+      #  "Profil client :\n" + "\n".join(profil_lines)
+   # )
 
 
 def _generer_via_openrouter(prompt: str) -> str:
@@ -543,7 +588,7 @@ def generer_recommandations_ai_text(client: dict) -> str:
     d'erreur ou de trace.
     """
     prompt = _construire_prompt(client)
-    st.write(prompt)
+   # st.write(prompt)
 
     if openrouter_disponible():
         try:
