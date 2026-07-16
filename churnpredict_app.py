@@ -439,7 +439,8 @@ def generer_recommandations(row: pd.Series) -> list:
 #  Les erreurs techniques ne sont JAMAIS montrées à l'utilisateur :
 #  un seul message métier générique est affiché en cas d'échec.
 # ────────────────────────────────────────────────────────────
-OPENROUTER_MODEL = os.environ.get("OPENROUTER_MODEL", "mistralai/pixtral-12b")
+#OPENROUTER_MODEL = os.environ.get("OPENROUTER_MODEL", "mistralai/pixtral-12b")
+OPENROUTER_MODEL = st.secrets["OPENROUTER_MODEL"]
 OPENROUTER_URL    = "https://openrouter.ai/api/v1/chat/completions"
 
 MESSAGE_IA_INDISPONIBLE = (
