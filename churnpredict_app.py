@@ -504,13 +504,13 @@ def generer_recommandations_ai_text(client: dict) -> str:
     prompt = _construire_prompt(client)
 
     if openrouter_disponible():
-    try:
-        return _generer_via_openrouter(prompt)
-    except Exception as e:
-        st.error(f"Erreur OpenRouter : {e}")
+        try:
+            return _generer_via_openrouter(prompt)
+        except Exception as e:
+            st.error(f"Erreur OpenRouter : {e}")
         return MESSAGE_IA_INDISPONIBLE
 
-return MESSAGE_IA_INDISPONIBLE
+    return MESSAGE_IA_INDISPONIBLE
 
    # if openrouter_disponible():
     #    try:
